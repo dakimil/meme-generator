@@ -44,9 +44,5 @@ RUN chmod -R 755 static/uploads
 # Expose port
 EXPOSE ${PORT}
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD python -c "import requests; requests.get('http://localhost:${PORT}/', timeout=2)" || exit 1
-
 # Command to run the application
 CMD ["python", "app.py"]
