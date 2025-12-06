@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Generator - Docker Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .docker-badge {
+            background-color: #2496ed;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+        
+        input[type="text"],
+        input[type="file"],
+        input[type="range"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="file"]:focus,
+        input[type="range"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .font-size-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        input[type="range"] {
+            flex: 1;
+            padding: 0;
+            height: 20px;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: transform 0.3s;
+            margin-top: 10px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .meme-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .meme-image {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            object-fit: contain;
+        }
+        
+        .text-display {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            text-align: left;
+        }
+        
+        .text-display h3 {
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+        
+        .text-display p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+        
+        .text-display strong {
+            color: #764ba2;
+        }
+        
+        .instructions {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .instructions h3 {
+            color: #2496ed;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .uploaded-info {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        .btn-new {
+            background: linear-gradient(135deg, #2196F3 0%, #0D47A1 100%);
+            color: white;
+        }
+        
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+        }
+        
+        .feature {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .feature h4 {
+            color: #ff9800;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Meme Generator</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+                <small style="color: #666; display: block; margin-top: 5px;">Supported formats: JPG, PNG, GIF</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="top_text">Top Text:</label>
+                <input type="text" id="top_text" name="top_text" placeholder="Enter top text for meme...">
+            </div>
+            
+            <div class="form-group">
+                <label for="bottom_text">Bottom Text:</label>
+                <input type="text" id="bottom_text" name="bottom_text" placeholder="Enter bottom text for meme...">
+            </div>
+            
+            <div class="form-group">
+                <label for="font_size">Font Size (Percentage of image height):</label>
+                <div class="font-size-control">
+                    <span style="color: #666;">Small</span>
+                    <input type="range" id="font_size" name="font_size" 
+                           min="5" max="20" value="{{ font_size|default(10) }}" 
+                           class="form-control">
+                    <span style="color: #666;">Large</span>
+                    <span class="font-size-value" id="font_size_value">{{ font_size|default(10) }}%</span>
+                </div>
+            </div>
+            
+            <button type="submit" class="generate-btn">Generate Meme</button>
+        </form>
+        
+        {% if meme_url %}
+        <div class="uploaded-info">
+            Meme successfully generated! Displaying below...
+            {% if font_size %}
+            <br><small>Font size used: {{ font_size }}% of image height</small>
+            {% endif %}
+        </div>
+        
+        <div class="meme-container">
+            <div class="text-display">
+                <h3>Your Meme Text:</h3>
+                <p><strong>Top:</strong> {{ top_text if top_text else "(No top text)" }}</p>
+                <p><strong>Bottom:</strong> {{ bottom_text if bottom_text else "(No bottom text)" }}</p>
+                {% if font_size %}
+                <p><strong>Font Size:</strong> {{ font_size }}% of image height</p>
+                {% endif %}
+            </div>
+            
+            <img src="{{ meme_url }}?t={{ range(1, 10000) | random }}" 
+                 alt="Generated Meme" 
+                 class="meme-image">
+            
+            <div class="button-group">
+                <a href="{{ meme_url }}" download class="btn btn-download">
+                    📥 Download Meme
+                </a>
+                <a href="/" class="btn btn-new">
+                    🆕 Create New Meme
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        
+    </div>
+
+    <script>
+        // Update font size value display in real-time
+        const fontSizeSlider = document.getElementById('font_size');
+        const fontSizeValue = document.getElementById('font_size_value');
+        
+        if (fontSizeSlider && fontSizeValue) {
+            fontSizeSlider.addEventListener('input', function() {
+                fontSizeValue.textContent = this.value + '%';
+            });
+        }
+        
+        // Auto-focus on top text field
+        document.addEventListener('DOMContentLoaded', function() {
+            const topTextInput = document.getElementById('top_text');
+            if (topTextInput) {
+                topTextInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
